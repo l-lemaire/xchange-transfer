@@ -38,3 +38,21 @@ They are run with [testcontainers](https://www.baeldung.com/spring-boot-testcont
 [testcontainers](https://www.baeldung.com/spring-boot-testcontainers-integration-test) is a Java library that supports JUnit tests, providing lightweight, throwaway instances of common databases or anything else that can run in a Docker container.
 
 Make sure you have Docker installed and running on your machine before running the tests.
+
+### Logging
+Logging is handled by [Log4j2](https://logging.apache.org/log4j/2.x/).
+The configuration file is available in the `src/main/resources/log4j2.xml` file.
+
+By default, logs are written to the console. To increase readability, the logs are colored.
+Every request is identified by a unique ID that is logged with every log message.
+It makes it easier to track the logs of a specific request.
+
+### Error handling
+Errors are handled by the `GlobalExceptionHandler` class.
+It catches all exceptions and returns a custom error response to the client.
+The error response contains the id of the request (see [Logging](#logging)) and the error message.
+
+## API
+The API documentation is available at [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html)
+
+The raw JSON documentation is available at [`http://localhost:8080/v3/api-docs`](http://localhost:8080/v3/api-docs)

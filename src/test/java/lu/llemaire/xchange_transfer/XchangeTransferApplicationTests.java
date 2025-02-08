@@ -95,6 +95,17 @@ class XchangeTransferApplicationTests extends AbstractTestContainer {
 	}
 
 	@Test
+	void createInstanceWithWrongCurrencyShouldThrowException() {
+		Account account = new Account();
+		account.setId(6L);
+		account.setCurrency("US");
+		account.setBalance(BigDecimal.valueOf(100.0));
+
+		//Check if saving the account with a wrong currency throws an exception
+		Assertions.assertThrows(Exception.class, () -> accountRepository.save(account));
+	}
+
+	@Test
 	void addBalance() {
 		//Create an account with a balance of 0
 		Account account = new Account();

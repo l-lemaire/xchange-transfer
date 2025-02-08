@@ -4,14 +4,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
+@Accessors(chain = true)
 @Getter @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "account", schema = "xchange_transfer")
 public class Account {
     @Id
