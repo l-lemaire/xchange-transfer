@@ -1,9 +1,17 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    container_name: 'xchange-transfer-postgres'
+    image: 'postgres:17.2'
+    restart: 'always'
     environment:
-      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_DB=xchange_transfer'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
-      - '5432'
+      - '5432:5432'
+    volumes:
+      - 'postgres_data:/var/lib/postgresql/data'
+
+volumes:
+  postgres_data:
+    driver: 'local'
