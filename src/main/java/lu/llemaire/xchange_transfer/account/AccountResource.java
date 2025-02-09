@@ -25,22 +25,22 @@ public class AccountResource implements AccountResourceApi {
     }
 
     @Override
-    public ResponseEntity<Account> findById(Long id) throws NotFoundException {
+    public ResponseEntity<Account> findById(final Long id) throws NotFoundException {
         return ResponseEntity.ok(accountService.findById(id));
     }
 
     @Override
-    public ResponseEntity<Account> create(Long id, String currency, BigDecimal balance) throws AlreadyExistsException {
+    public ResponseEntity<Account> create(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException {
         return ResponseEntity.ok(accountService.create(id, currency, balance));
     }
 
     @Override
-    public ResponseEntity<Account> update(Long id, String currency, BigDecimal balance) {
+    public ResponseEntity<Account> update(final Long id, final String currency, final BigDecimal balance) {
         return ResponseEntity.ok(accountService.update(id, currency, balance));
     }
 
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(final Long id) {
         accountService.delete(id);
         return ResponseEntity.ok().build();
     }

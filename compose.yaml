@@ -2,7 +2,6 @@ services:
   postgres:
     container_name: 'xchange-transfer-postgres'
     image: 'postgres:17.2'
-    restart: 'always'
     environment:
       - 'POSTGRES_DB=xchange_transfer'
       - 'POSTGRES_PASSWORD=secret'

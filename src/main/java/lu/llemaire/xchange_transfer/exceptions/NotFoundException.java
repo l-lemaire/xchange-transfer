@@ -1,7 +1,7 @@
 package lu.llemaire.xchange_transfer.exceptions;
 
 public class NotFoundException extends Exception {
-    public NotFoundException(String message) {
+    public NotFoundException(final String message) {
         super(message);
     }
 }

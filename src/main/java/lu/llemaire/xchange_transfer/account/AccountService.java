@@ -19,7 +19,7 @@ public class AccountService {
 
     final AccountRepository accountRepository;
 
-    public Account create(Long id, String currency, BigDecimal balance) throws AlreadyExistsException {
+    public Account create(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException {
         log.debug("Creating account with id {}", id);
         if (accountRepository.existsById(id)) {
             throw new AlreadyExistsException("Account with id " + id + " already exists");
@@ -37,18 +37,41 @@ public class AccountService {
                 .toList();
     }
 
-    public Account findById(Long id) throws NotFoundException {
+    @Transactional(readOnly = true)
+    public Account findById(final Long id) throws NotFoundException {
         log.debug("Retrieving account with id {}", id);
         return accountRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Account with id " + id + " not found"));
     }
 
-    public Account update(Long id, String currency, BigDecimal balance) {
+    public Account update(final Long id, final String currency, final BigDecimal balance) {
         log.debug("Updating account with id {}", id);
         return accountRepository.save(new Account(id, currency, balance));
     }
 
-    public void delete(Long id) {
+    /**
+     * Move funds from one account to another in the same transaction
+     *
+     * <p>It will check if the account with id fromId has enough funds to move fromAmount</p>
+     *
+     * @param fromId     the id of the account to move funds from
+     * @param toId       the id of the account to move funds to
+     * @param fromAmount the amount to move from the account with id fromId
+     * @param toAmount   the amount to move to the account with id toId
+     * @return true if the funds were moved successfully, false otherwise
+     */
+    public boolean moveFunds(final Long fromId, final Long toId, final BigDecimal fromAmount, final BigDecimal toAmount) {
+        log.debug("Moving funds from account with id {} to account with id {}", fromId, toId);
+        Account from = accountRepository.findById(fromId).orElseThrow();
+        if (from.getBalance().compareTo(fromAmount) < 0) {
+            return false;
+        }
+        accountRepository.subtractBalance(fromId, fromAmount);
+        accountRepository.addBalance(toId, toAmount);
+        return true;
+    }
+
+    public void delete(final Long id) {
         log.debug("Deleting account with id {}", id);
         accountRepository.deleteById(id);
     }

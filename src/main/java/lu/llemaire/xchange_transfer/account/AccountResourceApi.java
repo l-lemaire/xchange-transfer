@@ -36,7 +36,7 @@ public interface AccountResourceApi {
             @ApiResponse(responseCode = "404", description = "Account not found")
     })
     @GetMapping("/{id}")
-    ResponseEntity<Account> findById(@PathVariable @Parameter(description = "ID of the account to be retrieved") Long id) throws NotFoundException;
+    ResponseEntity<Account> findById(@PathVariable @Parameter(description = "ID of the account to be retrieved") final Long id) throws NotFoundException;
 
     @Operation(summary = "Create a new account", description = "Create a new account with the given details")
     @ApiResponses(value = {
@@ -47,9 +47,9 @@ public interface AccountResourceApi {
     })
     @PostMapping
     ResponseEntity<Account> create(
-            @RequestParam @NotNull @Parameter(description = "ID of the new account") Long id,
-            @RequestParam @NotNull @Size(min = 3, max = 3) @Parameter(description = "Currency code of the new account") String currency,
-            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "Initial balance of the new account") BigDecimal balance) throws AlreadyExistsException;
+            @RequestParam @NotNull @Parameter(description = "ID of the new account") final Long id,
+            @RequestParam @NotNull @Size(min = 3, max = 3) @Parameter(description = "Currency code of the new account") final String currency,
+            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "Initial balance of the new account") final BigDecimal balance) throws AlreadyExistsException;
 
     @Operation(summary = "Update an existing account", description = "Update the details of an existing account")
     @ApiResponses(value = {
@@ -59,14 +59,14 @@ public interface AccountResourceApi {
     })
     @PutMapping("/{id}")
     ResponseEntity<Account> update(
-            @PathVariable @NotNull @Parameter(description = "ID of the account to be updated") Long id,
-            @RequestParam @NotNull @Size(min = 3, max = 3) @Parameter(description = "New currency code of the account") String currency,
-            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "New balance of the account") BigDecimal balance);
+            @PathVariable @NotNull @Parameter(description = "ID of the account to be updated") final Long id,
+            @RequestParam @NotNull @Size(min = 3, max = 3) @Parameter(description = "New currency code of the account") final String currency,
+            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "New balance of the account") final BigDecimal balance);
 
     @Operation(summary = "Delete an account", description = "Delete an account by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully deleted account")
     })
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable @Parameter(description = "ID of the account to be deleted") Long id);
+    ResponseEntity<Void> delete(@PathVariable @Parameter(description = "ID of the account to be deleted") final Long id);
 }

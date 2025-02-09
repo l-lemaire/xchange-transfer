@@ -52,6 +52,30 @@ Errors are handled by the `GlobalExceptionHandler` class.
 It catches all exceptions and returns a custom error response to the client.
 The error response contains the id of the request (see [Logging](#logging)) and the error message.
 
+### FXRatesAPI
+The application uses the [FXRatesAPI](https://fxratesapi.com/) to get the exchange rates.
+Example can be found on their website.
+
+Here's a sample response for the following request:
+```
+https://api.fxratesapi.com/latest?currencies=USD&base=EUR&amount=1500
+```
+```json
+{
+  "root": {
+    "success": true,
+    "terms": "https://fxratesapi.com/legal/terms-conditions",
+    "privacy": "https://fxratesapi.com/legal/privacy-policy",
+    "timestamp": 1739095260,
+    "date": "2025-02-09T10:01:00.000Z",
+    "base": "EUR",
+    "rates": {
+      "USD": 1550.1471
+    }
+  }
+}
+```
+
 ## API
 The API documentation is available at [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html)
 

@@ -21,7 +21,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorEntity> handleNotFoundException(NotFoundException e) {
         return ResponseEntity
-                .status(404).
+                .status(400).
                 body(buildErrorEntity(e.getMessage()));
     }
 
@@ -29,6 +29,20 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorEntity> handleAlreadyExistsException(AlreadyExistsException e) {
         return ResponseEntity
                 .status(409)
+                .body(buildErrorEntity(e.getMessage()));
+    }
+
+    @ExceptionHandler(CurrencyServiceUnavailable.class)
+    public ResponseEntity<ErrorEntity> handleCurrencyServiceUnavailable(CurrencyServiceUnavailable e) {
+        return ResponseEntity
+                .status(502)
+                .body(buildErrorEntity(e.getMessage()));
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<ErrorEntity> handleInsufficientBalanceException(InsufficientBalanceException e) {
+        return ResponseEntity
+                .status(400)
                 .body(buildErrorEntity(e.getMessage()));
     }
 
