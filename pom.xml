@@ -12,7 +12,7 @@
 
 	<groupId>lu.llemaire</groupId>
 	<artifactId>xchange-transfer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>xchange-transfer</name>
 	<description>REST API that performs funds transfer between two accounts with currency exchange</description>
