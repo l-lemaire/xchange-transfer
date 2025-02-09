@@ -16,6 +16,7 @@ Fund transfer with currency
 - Run the given jar file with the following command (make sure you have Java 21 installed):
   - `java -jar xchange-transfer-0.0.1-SNAPSHOT.jar`
 - The application will be running on [`http://localhost:8080`](http://localhost:8080)
+- The open [API](#api) documentation is available at [`http://localhost:8080/swagger-ui.html`](http://localhost:8080/swagger-ui.html) or in the release package
 
 ## Development guide
 - Clone the repository
