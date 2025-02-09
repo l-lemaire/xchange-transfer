@@ -3,6 +3,7 @@ package lu.llemaire.xchange_transfer;
 import lu.llemaire.xchange_transfer.account.Account;
 import lu.llemaire.xchange_transfer.account.AccountService;
 import lu.llemaire.xchange_transfer.exceptions.AlreadyExistsException;
+import lu.llemaire.xchange_transfer.exceptions.CurrencyServiceUnavailable;
 import lu.llemaire.xchange_transfer.exceptions.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class AccountServiceTests extends AbstractTestContainer {
     private AccountService accountService;
 
     @Test
-    void createNewInstanceThenCallFindShouldNotChange() throws NotFoundException, AlreadyExistsException {
+    void createNewInstanceThenCallFindShouldNotChange() throws NotFoundException, AlreadyExistsException, CurrencyServiceUnavailable {
         // Create a new account
         accountService.create(9L, "EUR", BigDecimal.valueOf(0.0));
 

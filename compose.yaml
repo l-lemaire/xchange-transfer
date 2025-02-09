@@ -3,7 +3,7 @@ services:
     container_name: 'xchange-transfer-postgres'
     image: 'postgres:17.2'
     environment:
-      - 'POSTGRES_DB=xchange_transfer'
+      - 'POSTGRES_DB=postgres'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:

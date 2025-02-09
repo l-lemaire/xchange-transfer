@@ -10,6 +10,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lu.llemaire.xchange_transfer.exceptions.AlreadyExistsException;
+import lu.llemaire.xchange_transfer.exceptions.CurrencyServiceUnavailable;
 import lu.llemaire.xchange_transfer.exceptions.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,25 +44,26 @@ public interface AccountResourceApi {
             @ApiResponse(responseCode = "200", description = "Successfully created account",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Account.class))),
-            @ApiResponse(responseCode = "409", description = "Account already exists")
+            @ApiResponse(responseCode = "409", description = "Account already exists"),
+            @ApiResponse(responseCode = "502", description = "Currency service unavailable")
     })
     @PostMapping
     ResponseEntity<Account> create(
             @RequestParam @NotNull @Parameter(description = "ID of the new account") final Long id,
             @RequestParam @NotNull @Size(min = 3, max = 3) @Parameter(description = "Currency code of the new account") final String currency,
-            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "Initial balance of the new account") final BigDecimal balance) throws AlreadyExistsException;
+            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "Initial balance of the new account") final BigDecimal balance) throws AlreadyExistsException, CurrencyServiceUnavailable;
 
     @Operation(summary = "Update an existing account", description = "Update the details of an existing account")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully updated account",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Account.class)))
+            @ApiResponse(responseCode = "200", description = "Successfully updated account", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))),
+            @ApiResponse(responseCode = "409", description = "Account already exists"),
+            @ApiResponse(responseCode = "502", description = "Currency service unavailable")
     })
     @PutMapping("/{id}")
     ResponseEntity<Account> update(
             @PathVariable @NotNull @Parameter(description = "ID of the account to be updated") final Long id,
             @RequestParam @NotNull @Size(min = 3, max = 3) @Parameter(description = "New currency code of the account") final String currency,
-            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "New balance of the account") final BigDecimal balance);
+            @RequestParam @NotNull @DecimalMin(value = "0.0") @Parameter(description = "New balance of the account") final BigDecimal balance) throws AlreadyExistsException, CurrencyServiceUnavailable;
 
     @Operation(summary = "Delete an account", description = "Delete an account by its ID")
     @ApiResponses(value = {

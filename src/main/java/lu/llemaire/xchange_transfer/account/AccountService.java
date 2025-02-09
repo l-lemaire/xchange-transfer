@@ -2,7 +2,9 @@ package lu.llemaire.xchange_transfer.account;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lu.llemaire.xchange_transfer.common.FXRatesAPIService;
 import lu.llemaire.xchange_transfer.exceptions.AlreadyExistsException;
+import lu.llemaire.xchange_transfer.exceptions.CurrencyServiceUnavailable;
 import lu.llemaire.xchange_transfer.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +19,18 @@ import java.util.List;
 @Log4j2
 public class AccountService {
 
+    final FXRatesAPIService fxRatesAPIService;
+
     final AccountRepository accountRepository;
 
-    public Account create(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException {
+    public Account create(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException, CurrencyServiceUnavailable {
         log.debug("Creating account with id {}", id);
         if (accountRepository.existsById(id)) {
             throw new AlreadyExistsException("Account with id " + id + " already exists");
+        }
+
+        if (!fxRatesAPIService.checkCurrency(currency)) {
+            throw new AlreadyExistsException("Currency " + currency + " is not supported");
         }
 
         return accountRepository.save(new Account(id, currency, balance));
@@ -44,8 +52,12 @@ public class AccountService {
                 .orElseThrow(() -> new NotFoundException("Account with id " + id + " not found"));
     }
 
-    public Account update(final Long id, final String currency, final BigDecimal balance) {
+    public Account update(final Long id, final String currency, final BigDecimal balance) throws CurrencyServiceUnavailable, AlreadyExistsException {
         log.debug("Updating account with id {}", id);
+        if (!fxRatesAPIService.checkCurrency(currency)) {
+            throw new AlreadyExistsException("Currency " + currency + " is not supported");
+        }
+
         return accountRepository.save(new Account(id, currency, balance));
     }
 

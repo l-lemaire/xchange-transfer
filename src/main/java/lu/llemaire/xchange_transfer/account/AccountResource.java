@@ -1,8 +1,8 @@
 package lu.llemaire.xchange_transfer.account;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lu.llemaire.xchange_transfer.exceptions.AlreadyExistsException;
+import lu.llemaire.xchange_transfer.exceptions.CurrencyServiceUnavailable;
 import lu.llemaire.xchange_transfer.exceptions.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
-@Log4j2
 public class AccountResource implements AccountResourceApi {
 
-    final AccountService accountService;
+    private final AccountService accountService;
 
     @Override
     public ResponseEntity<List<Account>> findAll() {
@@ -30,12 +29,12 @@ public class AccountResource implements AccountResourceApi {
     }
 
     @Override
-    public ResponseEntity<Account> create(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException {
+    public ResponseEntity<Account> create(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException, CurrencyServiceUnavailable {
         return ResponseEntity.ok(accountService.create(id, currency, balance));
     }
 
     @Override
-    public ResponseEntity<Account> update(final Long id, final String currency, final BigDecimal balance) {
+    public ResponseEntity<Account> update(final Long id, final String currency, final BigDecimal balance) throws AlreadyExistsException, CurrencyServiceUnavailable {
         return ResponseEntity.ok(accountService.update(id, currency, balance));
     }
 

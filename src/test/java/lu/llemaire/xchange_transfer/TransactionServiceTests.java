@@ -2,6 +2,7 @@ package lu.llemaire.xchange_transfer;
 
 import lu.llemaire.xchange_transfer.account.Account;
 import lu.llemaire.xchange_transfer.account.AccountService;
+import lu.llemaire.xchange_transfer.common.FXRatesAPIService;
 import lu.llemaire.xchange_transfer.exceptions.AlreadyExistsException;
 import lu.llemaire.xchange_transfer.exceptions.CurrencyServiceUnavailable;
 import lu.llemaire.xchange_transfer.exceptions.InsufficientBalanceException;
@@ -22,29 +23,32 @@ public class TransactionServiceTests extends AbstractTestContainer {
     private TransactionService transactionService;
 
     @Autowired
+    private FXRatesAPIService fxRatesAPIService;
+
+    @Autowired
     private AccountService accountService;
 
     @Test
     void checkCurrency() throws CurrencyServiceUnavailable {
         // Check if the currency is available
-        Assertions.assertEquals(Boolean.TRUE, transactionService.checkCurrency("EUR"));
+        Assertions.assertEquals(Boolean.TRUE, fxRatesAPIService.checkCurrency("EUR"));
     }
 
     @Test
     void checkCurrencyWithInvalidCurrencyShouldThrowException() {
         // Check if the currency is available
-        Assertions.assertThrows(Exception.class, () -> transactionService.checkCurrency("KKK"));
+        Assertions.assertThrows(Exception.class, () -> fxRatesAPIService.checkCurrency("KKK"));
     }
 
     @Test
     void getConvertedAmount() throws CurrencyServiceUnavailable {
-        Assertions.assertNotNull(transactionService.getConvertedAmount("USD", "EUR", new BigDecimal("100.0")));
+        Assertions.assertNotNull(fxRatesAPIService.getConvertedAmount("USD", "EUR", new BigDecimal("100.0")));
     }
 
     @Test
     void getConvertedAmountWithInvalidCurrencyShouldThrowException() {
-        Assertions.assertThrows(Exception.class, () -> transactionService.getConvertedAmount("KKK", "EUR", new BigDecimal("100.0")));
-        Assertions.assertThrows(Exception.class, () -> transactionService.getConvertedAmount("USD", "KKK", new BigDecimal("100.0")));
+        Assertions.assertThrows(Exception.class, () -> fxRatesAPIService.getConvertedAmount("KKK", "EUR", new BigDecimal("100.0")));
+        Assertions.assertThrows(Exception.class, () -> fxRatesAPIService.getConvertedAmount("USD", "KKK", new BigDecimal("100.0")));
     }
 
     @Test
@@ -72,11 +76,11 @@ public class TransactionServiceTests extends AbstractTestContainer {
         Assertions.assertEquals(BigDecimal.valueOf(50.0).setScale(4, RoundingMode.HALF_DOWN), fromAccount.getBalance());
 
         Account toAccount = accountService.findById(13L);
-        Assertions.assertTrue(BigDecimal.valueOf(50000.0).setScale(4, RoundingMode.HALF_DOWN).compareTo(toAccount.getBalance()) < 0);
+        Assertions.assertTrue(BigDecimal.valueOf(900000.0).setScale(4, RoundingMode.HALF_DOWN).compareTo(toAccount.getBalance()) < 0);
     }
 
     @Test
-    void createTransactionWithInvalidFromAccountShouldThrowException() throws AlreadyExistsException {
+    void createTransactionWithInvalidFromAccountShouldThrowException() throws AlreadyExistsException, CurrencyServiceUnavailable {
         accountService.create(14L, "EUR", new BigDecimal("100.0"));
         accountService.create(15L, "EUR", new BigDecimal("100.0"));
 
@@ -84,7 +88,7 @@ public class TransactionServiceTests extends AbstractTestContainer {
     }
 
     @Test
-    void createTransactionWithInvalidToAccountShouldThrowException() throws AlreadyExistsException {
+    void createTransactionWithInvalidToAccountShouldThrowException() throws AlreadyExistsException, CurrencyServiceUnavailable {
         accountService.create(17L, "EUR", new BigDecimal("100.0"));
         accountService.create(18L, "EUR", new BigDecimal("100.0"));
 
@@ -92,7 +96,7 @@ public class TransactionServiceTests extends AbstractTestContainer {
     }
 
     @Test
-    void createTransactionWithInsufficientBalanceShouldThrowException() throws AlreadyExistsException {
+    void createTransactionWithInsufficientBalanceShouldThrowException() throws AlreadyExistsException, CurrencyServiceUnavailable {
         accountService.create(20L, "EUR", new BigDecimal("100.0"));
         accountService.create(21L, "EUR", new BigDecimal("100.0"));
 

@@ -25,6 +25,20 @@ public class RestExceptionHandler {
                 body(buildErrorEntity(e.getMessage()));
     }
 
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<ErrorEntity> handleInsufficientBalanceException(InsufficientBalanceException e) {
+        return ResponseEntity
+                .status(400)
+                .body(buildErrorEntity(e.getMessage()));
+    }
+
+    @ExceptionHandler(CurrencyNotExistsException.class)
+    public ResponseEntity<ErrorEntity> handleCurrencyNotExistsException(CurrencyNotExistsException e) {
+        return ResponseEntity
+                .status(400)
+                .body(buildErrorEntity(e.getMessage()));
+    }
+
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ErrorEntity> handleAlreadyExistsException(AlreadyExistsException e) {
         return ResponseEntity
@@ -36,13 +50,6 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorEntity> handleCurrencyServiceUnavailable(CurrencyServiceUnavailable e) {
         return ResponseEntity
                 .status(502)
-                .body(buildErrorEntity(e.getMessage()));
-    }
-
-    @ExceptionHandler(InsufficientBalanceException.class)
-    public ResponseEntity<ErrorEntity> handleInsufficientBalanceException(InsufficientBalanceException e) {
-        return ResponseEntity
-                .status(400)
                 .body(buildErrorEntity(e.getMessage()));
     }
 
